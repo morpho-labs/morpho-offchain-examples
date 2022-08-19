@@ -21,7 +21,7 @@ const weth = new ethers.Contract(
   "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   [
     "function deposit() external payable",
-    "function withdraw(uint256) external payable",
+    "function withdraw(uint256) external",
     "function approve(address, uint256) external returns (bool)",
   ],
   signer
