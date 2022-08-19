@@ -2,7 +2,8 @@
   "type": "module",
   "scripts": {
     "run:supply": "node ./src/MorphoSupplier.js",
-    "run:borrow": "node ./src/MorphoBorrower.js"
+    "run:borrow": "node ./src/MorphoBorrower.js",
+    "run:rewards": "node ./src/MorphoRewardsTracker.js"
   },
   "dependencies": {
     "dotenv": "^16.0.1",

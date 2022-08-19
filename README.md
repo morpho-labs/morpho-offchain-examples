@@ -27,3 +27,4 @@ cp .env.example .env
 
 - [MorphoSupplier.js](./src/MorphoSupplier.js): query supply-related data & supply through Morpho-Compound using ethers.js
 - [MorphoBorrower.js](./src/MorphoBorrower.js): query borrow-related data & borrow through Morpho-Compound using ethers.js
+- [MorphoRewardsTracker.js](./src/MorphoRewardsTracker.js): query rewards-related data using ethers.js
