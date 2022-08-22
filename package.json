@@ -1,13 +1,17 @@
 {
   "type": "module",
   "scripts": {
+    "fetch:abis": "node ./scripts/fetchAbis.js",
     "run:supply": "node ./src/MorphoSupplier.js",
     "run:borrow": "node ./src/MorphoBorrower.js",
     "run:rewards": "node ./src/MorphoRewardsTracker.js"
   },
   "dependencies": {
     "dotenv": "^16.0.1",
-    "ethers": "^5.6.9",
+    "ethers": "^5.7.0",
     "prettier": "^2.7.1"
+  },
+  "devDependencies": {
+    "@openzeppelin/upgrades-core": "^1.18.0"
   }
 }

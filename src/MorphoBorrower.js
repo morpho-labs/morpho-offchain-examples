@@ -1,6 +1,12 @@
 import dotenv from "dotenv";
 import ethers from "ethers";
 
+import DAIAbi from "../abis/DAI.json" assert { type: "json" };
+import WETH9Abi from "../abis/WETH9.json" assert { type: "json" };
+import LensAbi from "../abis/Lens.json" assert { type: "json" };
+import MorphoAbi from "../abis/Morpho.json" assert { type: "json" };
+import OracleAbi from "../abis/Oracle.json" assert { type: "json" };
+
 dotenv.config();
 
 const signer = new ethers.Wallet(
@@ -17,50 +23,11 @@ const cWbtc2Address = "0xccF4429DB6322D5C611ee964527D42E5d685DD6a";
 const wbtcDecimals = 8;
 const daiDecimals = 18;
 
-const weth = new ethers.Contract(
-  "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-  [
-    "function deposit() external payable",
-    "function withdraw(uint256) external",
-    "function approve(address, uint256) external returns (bool)",
-  ],
-  signer
-);
-
-const dai = new ethers.Contract(
-  "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-  ["function approve(address, uint256) external returns (bool)"],
-  signer
-);
-
-const lens = new ethers.Contract(
-  "0x930f1b46e1D081Ec1524efD95752bE3eCe51EF67",
-  [
-    "function getTotalBorrow() external view returns (uint256, uint256, uint256)",
-    "function getTotalMarketBorrow(address) external view returns (uint256, uint256)",
-    "function getCurrentBorrowBalanceInOf(address, address) external view returns (uint256, uint256, uint256)",
-    "function getAverageBorrowRatePerBlock(address) external view returns (uint256)",
-    "function getCurrentUserBorrowRatePerBlock(address, address) external view returns (uint256)",
-    "function getNextUserBorrowRatePerBlock(address, address, uint256) external view returns (uint256)",
-  ],
-  signer
-);
-
-const morpho = new ethers.Contract(
-  "0x8888882f8f843896699869179fB6E4f7e3B58888",
-  [
-    "function borrow(address, uint256) external",
-    "function borrow(address, uint256, uint256) external",
-    "function repay(address, address, uint256) external",
-  ],
-  signer
-);
-
-const oracle = new ethers.Contract(
-  "0x65c816077C29b557BEE980ae3cC2dCE80204A0C5",
-  ["function getUnderlyingPrice(address) external view returns (uint256)"],
-  signer
-);
+const dai = new ethers.Contract("0x6B175474E89094C44Da98b954EedeAC495271d0F", DAIAbi, signer);
+const weth = new ethers.Contract("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", WETH9Abi, signer);
+const lens = new ethers.Contract("0x930f1b46e1D081Ec1524efD95752bE3eCe51EF67", LensAbi, signer);
+const morpho = new ethers.Contract("0x8888882f8f843896699869179fB6E4f7e3B58888", MorphoAbi, signer);
+const oracle = new ethers.Contract("0x65c816077C29b557BEE980ae3cC2dCE80204A0C5", OracleAbi, signer);
 
 /// QUERY ///
 
@@ -99,7 +66,7 @@ const nbBlocksPerYear = 4 * 60 * 24 * 365.25;
 // @note The borrow rate experienced on a market is specific to each user,
 // @note dependending on how their borrow is matched peer-to-peer or borrowed to the Compound pool.
 async function getDAIAvgBorrowAPR() {
-  const avgBorrowRatePerBlock = await lens.getAverageBorrowRatePerBlock(
+  const [avgBorrowRatePerBlock] = await lens.getAverageBorrowRatePerBlock(
     cDaiAddress // the DAI market, represented by the cDAI ERC20 token
   );
 
@@ -126,14 +93,14 @@ async function getWBTCBorrowAPR() {
 // @note The borrow rate experienced on a market is specific to each user,
 // @note dependending on how their borrow is matched peer-to-peer or borrowed to the Compound pool.
 async function getWBTCNextBorrowAPR(amount) {
-  const borrowRatePerBlock = await lens.getNextUserBorrowRatePerBlock(
+  const [nextBorrowRatePerBlock] = await lens.getNextUserBorrowRatePerBlock(
     cWbtc2Address, // the DAI market, represented by the cDAI ERC20 token
     signerAddress, // the address of the user you want to get the next borrow rate of
     amount
   );
 
   return (
-    Number(ethers.utils.formatUnits(borrowRatePerBlock, 18)) * // 18 decimals, whatever the market
+    Number(ethers.utils.formatUnits(nextBorrowRatePerBlock, 18)) * // 18 decimals, whatever the market
     nbBlocksPerYear
   );
 }
