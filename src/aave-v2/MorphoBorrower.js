@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
 import ethers from "ethers";
 
-import DAIAbi from "../abis/DAI.json" assert { type: "json" };
-import WETH9Abi from "../abis/WETH9.json" assert { type: "json" };
-import LensAbi from "../abis/Lens.json" assert { type: "json" };
-import MorphoAbi from "../abis/Morpho.json" assert { type: "json" };
-import OracleAbi from "../abis/Oracle.json" assert { type: "json" };
+import DAIAbi from "../../abis/DAI.json" assert { type: "json" };
+import WETH9Abi from "../../abis/WETH9.json" assert { type: "json" };
+import LensAbi from "../../abis/Lens.json" assert { type: "json" };
+import MorphoAbi from "../../abis/Morpho.json" assert { type: "json" };
+import OracleAbi from "../../abis/Oracle.json" assert { type: "json" };
 
 dotenv.config();
 
