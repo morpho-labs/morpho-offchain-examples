@@ -112,7 +112,7 @@ getWBTCSupplyBalanceUSD().then((val) => console.log("WBTC own supply USD", val))
 getDAIAvgSupplyAPR().then((val) => console.log("DAI avg supply APR", val));
 getWBTCSupplyAPR().then((val) => console.log("WBTC supply APR", val));
 getWBTCNextSupplyAPR(ethers.utils.parseUnits("100", wbtcDecimals)).then((val) =>
-  console.log("DAI next supply rate", val)
+  console.log("WBTC next supply rate", val)
 );
 
 /// SUPPLY ///

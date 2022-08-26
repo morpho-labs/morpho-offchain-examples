@@ -112,7 +112,7 @@ getWBTCBorrowBalanceUSD().then((val) => console.log("WBTC own borrow USD", val))
 getDAIAvgBorrowAPR().then((val) => console.log("DAI avg borrow APR", val));
 getWBTCBorrowAPR().then((val) => console.log("WBTC borrow APR", val));
 getWBTCNextBorrowAPR(ethers.utils.parseUnits("100", wbtcDecimals)).then((val) =>
-  console.log("DAI next borrow rate", val)
+  console.log("WBTC next borrow rate", val)
 );
 
 /// BORROW ///
