@@ -3,7 +3,7 @@
   "scripts": {
     "abis": "npx etherscan-abi 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 0x6B175474E89094C44Da98b954EedeAC495271d0F",
     "abis:compound": "npx etherscan-abi --target abis/compound/ 0x930f1b46e1D081Ec1524efD95752bE3eCe51EF67 0x8888882f8f843896699869179fB6E4f7e3B58888 0x65c816077C29b557BEE980ae3cC2dCE80204A0C5",
-    "abis:aave-v2": "npx etherscan-abi --target abis/aave-v2/ 0x930f1b46e1D081Ec1524efD95752bE3eCe51EF67 0x8888882f8f843896699869179fB6E4f7e3B58888 0x65c816077C29b557BEE980ae3cC2dCE80204A0C5",
+    "abis:aave-v2": "npx etherscan-abi --target abis/aave-v2/ 0x8706256509684e9cd93b7f19254775ce9324c226 0x777777c9898d384f785ee44acfe945efdff5f3e0 0xA50ba011c48153De246E5192C8f9258A2ba79Ca9",
     "supply:compound": "node ./src/compound/MorphoSupplier.js",
     "borrow:compound": "node ./src/compound/MorphoBorrower.js",
     "rewards:compound": "node ./src/compound/MorphoRewardsTracker.js",
