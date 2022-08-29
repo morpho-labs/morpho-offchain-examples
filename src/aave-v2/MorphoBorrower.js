@@ -28,7 +28,7 @@ const daiDecimals = 18;
 
 const dai = new ethers.Contract("0x6B175474E89094C44Da98b954EedeAC495271d0F", DAIAbi, signer);
 const weth = new ethers.Contract("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", WETH9Abi, signer);
-const lens = new ethers.Contract("0x8706256509684e9cd93b7f19254775ce9324c226", LensAbi, signer);
+const lens = new ethers.Contract("0x507fA343d0A90786d86C7cd885f5C49263A91FF4", LensAbi, signer);
 const morpho = new ethers.Contract("0x777777c9898d384f785ee44acfe945efdff5f3e0", MorphoAbi, signer);
 const oracle = new ethers.Contract("0xA50ba011c48153De246E5192C8f9258A2ba79Ca9", OracleAbi, signer);
 
@@ -125,8 +125,8 @@ getWBTCNextBorrowAPR(ethers.utils.parseUnits("100", wbtcDecimals)).then((val) =>
 
 /// BORROW ///
 
-async function borrowERC20(cTokenAddress, amount) {
-  await morpho.borrow(cTokenAddress, amount);
+async function borrowERC20(aTokenAddress, amount) {
+  await morpho.borrow(aTokenAddress, amount);
 }
 
 async function borrowDAI(amount) {
@@ -153,10 +153,10 @@ async function borrowETH(amount) {
 
 /// REPAY ///
 
-async function repayERC20(cTokenAddress, underlying, amount) {
+async function repayERC20(aTokenAddress, underlying, amount) {
   await underlying.approve(morpho.address, amount);
   await morpho.repay(
-    cTokenAddress,
+    aTokenAddress,
     signerAddress, // the address of the user you want to supply on behalf of
     amount
   );
