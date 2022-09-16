@@ -11,8 +11,6 @@ const signer = new ethers.Wallet(
   new ethers.providers.JsonRpcBatchProvider(process.env.RPC_URL)
 );
 
-const signerAddress = await signer.getAddress();
-
 const cDaiAddress = "0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643";
 const cCompAddress = "0x70e36f6BF80a52b3B46b3aF8e106CC0ed743E8e4";
 
@@ -24,7 +22,7 @@ const oracle = new ethers.Contract("0x65c816077C29b557BEE980ae3cC2dCE80204A0C5",
 async function getUnclaimedComp() {
   const compRewards = await lens.getUserUnclaimedRewards(
     [cDaiAddress], // the markets to query unclaimed COMP rewards on
-    signerAddress // the address of the user you want to query unclaimed COMP rewards of
+    signer.address // the address of the user you want to query unclaimed COMP rewards of
   );
 
   return Number(ethers.utils.formatUnits(compRewards, compDecimals));
@@ -33,7 +31,7 @@ async function getUnclaimedComp() {
 async function getUnclaimedCompUSD() {
   const compRewards = await getUnclaimedComp(
     [cDaiAddress], // the markets to query unclaimed COMP rewards on
-    signerAddress // the address of the user you want to query unclaimed COMP rewards of
+    signer.address // the address of the user you want to query unclaimed COMP rewards of
   );
   const oraclePrice = await oracle.getUnderlyingPrice(cCompAddress); // in (36 - nb decimals of WBTC = 28) decimals
 

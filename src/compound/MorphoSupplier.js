@@ -14,8 +14,6 @@ const signer = new ethers.Wallet(
   new ethers.providers.JsonRpcBatchProvider(process.env.RPC_URL)
 );
 
-const signerAddress = await signer.getAddress();
-
 const cEthAddress = "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5";
 const cDaiAddress = "0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643";
 const cWbtc2Address = "0xccF4429DB6322D5C611ee964527D42E5d685DD6a";
@@ -48,7 +46,7 @@ async function getTotalDAIMarketSupply() {
 async function getWBTCSupplyBalance() {
   const [suppliedOnPool, suppliedP2P] = await lens.getCurrentSupplyBalanceInOf(
     cWbtc2Address, // the WBTC market, represented by the cWBTC2 ERC20 token
-    signerAddress // the address of the user you want to get the supply of
+    signer.address // the address of the user you want to get the supply of
   );
 
   return Number(ethers.utils.formatUnits(suppliedP2P.add(suppliedOnPool), wbtcDecimals));
@@ -81,7 +79,7 @@ async function getDAIAvgSupplyAPR() {
 async function getWBTCSupplyAPR() {
   const supplyRatePerBlock = await lens.getCurrentUserSupplyRatePerBlock(
     cWbtc2Address, // the DAI market, represented by the cDAI ERC20 token
-    signerAddress // the address of the user you want to get the supply rate of
+    signer.address // the address of the user you want to get the supply rate of
   );
 
   return (
@@ -95,7 +93,7 @@ async function getWBTCSupplyAPR() {
 async function getWBTCNextSupplyAPR(amount) {
   const [nextSupplyRatePerBlock] = await lens.getNextUserSupplyRatePerBlock(
     cWbtc2Address, // the DAI market, represented by the cDAI ERC20 token
-    signerAddress, // the address of the user you want to get the next supply rate of
+    signer.address, // the address of the user you want to get the next supply rate of
     amount
   );
 
@@ -121,7 +119,7 @@ async function supplyERC20(cTokenAddress, underlying, amount) {
   await underlying.approve(morpho.address, amount);
   await morpho.supply(
     cTokenAddress,
-    signerAddress, // the address of the user you want to supply on behalf of
+    signer.address, // the address of the user you want to supply on behalf of
     amount
   );
 }
@@ -159,7 +157,7 @@ async function withdrawDAI(amount) {
     cDaiAddress, // the DAI market, represented by the cDAI ERC20 token
     amount
   );
-  // signer now has _amount WETH: dai.balanceOf(signerAddress) == _amount
+  // signer now has _amount WETH: dai.balanceOf(signer.address) == _amount
 }
 
 async function withdrawETH(amount) {
@@ -168,10 +166,10 @@ async function withdrawETH(amount) {
     amount
   );
 
-  // signer now has _amount WETH: weth.balanceOf(signerAddress) == _amount
+  // signer now has _amount WETH: weth.balanceOf(signer.address) == _amount
   return weth.withdraw(amount);
   // signer now has _amount ETH: signer.getBalance() == _amount
 }
 
-// withdrawDAI(ethers.utils.parseUnits(100, 18)); // DAI has 18 decimals
+// withdrawDAI(ethers.utils.parseUnits("100", daiDecimals));
 // withdrawETH(ethers.utils.parseEther(1));

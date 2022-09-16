@@ -14,8 +14,6 @@ const signer = new ethers.Wallet(
   new ethers.providers.JsonRpcBatchProvider(process.env.RPC_URL)
 );
 
-const signerAddress = await signer.getAddress();
-
 const daiAddress = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 const wbtcAddress = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
 
@@ -58,7 +56,7 @@ async function getTotalDAIMarketBorrow() {
 async function getWBTCBorrowBalance() {
   const [borrowedOnPool, borrowedP2P] = await lens.getCurrentBorrowBalanceInOf(
     aWbtcAddress, // the WBTC market, represented by the aWBTC ERC20 token
-    signerAddress // the address of the user you want to get the borrow of
+    signer.address // the address of the user you want to get the borrow of
   );
 
   return Number(ethers.utils.formatUnits(borrowedP2P.add(borrowedOnPool), wbtcDecimals));
@@ -93,7 +91,7 @@ async function getDAIAvgBorrowAPR() {
 async function getWBTCBorrowAPR() {
   const borrowRatePerYear = await lens.getCurrentUserBorrowRatePerYear(
     aWbtcAddress, // the DAI market, represented by the aDAI ERC20 token
-    signerAddress // the address of the user you want to get the borrow rate of
+    signer.address // the address of the user you want to get the borrow rate of
   );
 
   return Number(ethers.utils.formatUnits(borrowRatePerYear, 27)); // 18 decimals, whatever the market
@@ -104,7 +102,7 @@ async function getWBTCBorrowAPR() {
 async function getWBTCNextBorrowAPR(amount) {
   const [nextBorrowRatePerYear] = await lens.getNextUserBorrowRatePerYear(
     aWbtcAddress, // the DAI market, represented by the aDAI ERC20 token
-    signerAddress, // the address of the user you want to get the next borrow rate of
+    signer.address, // the address of the user you want to get the next borrow rate of
     amount
   );
 
@@ -134,7 +132,7 @@ async function borrowDAI(amount) {
     aDaiAddress, // the DAI market, represented by the aDAI ERC20 token
     amount
   );
-  // signer now has _amount DAI: dai.balanceOf(signerAddress) == _amount
+  // signer now has _amount DAI: dai.balanceOf(signer.address) == _amount
 }
 
 async function borrowETH(amount) {
@@ -143,7 +141,7 @@ async function borrowETH(amount) {
     amount
   );
 
-  // signer now has _amount WETH: weth.balanceOf(signerAddress) == _amount
+  // signer now has _amount WETH: weth.balanceOf(signer.address) == _amount
   return weth.withdraw(amount);
   // signer now has _amount ETH: signer.getBalance() == _amount
 }
@@ -157,7 +155,7 @@ async function repayERC20(aTokenAddress, underlying, amount) {
   await underlying.approve(morpho.address, amount);
   await morpho.repay(
     aTokenAddress,
-    signerAddress, // the address of the user you want to supply on behalf of
+    signer.address, // the address of the user you want to supply on behalf of
     amount
   );
 }
@@ -181,5 +179,5 @@ async function repayETH(amount) {
   );
 }
 
-// repayDAI(ethers.utils.parseUnits(100, 18)); // DAI has 18 decimals
+// repayDAI(ethers.utils.parseUnits("100", daiDecimals));
 // repayETH(ethers.utils.parseEther(1));
