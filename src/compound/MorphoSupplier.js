@@ -173,3 +173,11 @@ async function withdrawETH(amount) {
 
 // withdrawDAI(ethers.utils.parseUnits("100", daiDecimals));
 // withdrawETH(ethers.utils.parseEther(1));
+
+/// REWARDS ///
+
+async function claimRewards() {
+  return morpho.claimRewards([cEthAddress, cDaiAddress], false); // signer has received pool rewards accrued through Morpho
+}
+
+// claimRewards();
